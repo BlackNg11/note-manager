@@ -21,6 +21,21 @@ const allReducer = (state = noteInit, action) => {
       return { ...state, editItem: action.editObject };
       break;
 
+    case "EDIT_DATA":
+      //Update on firebase
+      noteData.child(action.payload.id).update({
+        content: action.payload.noteContent,
+        title: action.payload.noteTitle
+      });
+      return { ...state, editItem: {} };
+      break;
+
+    case "DELETE_DATA":
+      //Update on firebase
+      noteData.child(action.payload.key).remove();
+      return state;
+      break;
+
     default:
       return state;
   }

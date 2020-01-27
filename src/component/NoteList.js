@@ -7,19 +7,15 @@ class NoteList extends React.Component {
     dataFirebase: []
   }
 
-  UNSAFE_componentWillMount() {
-    let arrData = [];
+  UNSAFE_componentWillMount(){
     noteData.on('value',(notes) => {
+      let arrData = [];
       notes.forEach((note, i) => {
         const key = note.key;
         const noteTitle = note.val().title;
         const noteContent = note.val().content;
 
-        arrData.push({
-          key,
-          noteTitle,
-          noteContent
-        })
+        arrData = [...arrData, {key,noteTitle,noteContent}]
       });
       this.setState({
         dataFirebase: arrData
@@ -31,7 +27,6 @@ class NoteList extends React.Component {
     if (this.state.dataFirebase) {
       return (
         this.state.dataFirebase.map((val,index) => {
-          ;
           return (
             <NoteItem key={index} note={val} index={index} title={val.noteTitle} content={val.noteContent}/>
           )

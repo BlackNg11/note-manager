@@ -34,6 +34,8 @@ var noteData = firebase.database().ref("noteData");
    id: 12,
    title:'Ko biet ghi gi'
  })
+
+ noteData.child('node1').update();
  */
 
 //3.Them Du lieu tu sinh ra ID
