@@ -3,7 +3,9 @@ import { combineReducers } from "redux";
 
 const noteInit = {
   isEdit: false,
-  editItem: {}
+  isAdd: false,
+  editItem: {},
+  alertShow: false
 };
 
 const allReducer = (state = noteInit, action) => {
@@ -15,6 +17,18 @@ const allReducer = (state = noteInit, action) => {
 
     case "CHANGE_EDIT_STATUS":
       return { ...state, isEdit: !state.isEdit };
+      break;
+
+    case "CHANGE_ADD_STATUS":
+      return { ...state, isAdd: !state.isAdd };
+      break;
+
+    case "ALERT_ON":
+      return { ...state, alertShow: true };
+      break;
+
+    case "ALERT_OFF":
+      return { ...state, alertShow: false };
       break;
 
     case "GET_EDIT_DATA":

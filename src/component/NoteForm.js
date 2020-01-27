@@ -3,10 +3,21 @@ import { connect } from "react-redux";
 
 class NoteForm extends React.Component {
   state = {
-    noteTitle: '',
-    noteContent: '',
-    id: ''
+    noteTitle: "",
+    noteContent: "",
+    id: ""
   };
+
+  UNSAFE_componentWillMount() {
+    const data = this.props.data.editItem;
+    if (data) {
+      this.setState({
+        noteTitle: data.noteTitle,
+        noteContent: data.noteContent,
+        id: data.key
+      });
+    }
+  }
 
   isChange = e => {
     const name = e.target.name;
@@ -20,41 +31,42 @@ class NoteForm extends React.Component {
   dataManipulate = (title, content) => {
     if (this.state.id) {
       //Edit Case
-      let editObject = {...this.state};
+      let editObject = { ...this.state };
       this.props.editDataStore(editObject);
 
       this.props.changeEditStatus();
-
-    }else{
+      this.props.alertOn();
+    } else {
       //ADD CASE
       let item = {};
       item.title = title;
       item.content = content;
 
       this.props.addDataStore(item);
+      this.props.alertOn();
     }
-
   };
 
-
-
-  UNSAFE_componentWillMount() {
-    const data = this.props.data.editItem;
-    if (data) {
-      this.setState({
-        noteTitle: data.noteTitle,
-        noteContent: data.noteContent,
-        id: data.key
-      })
+  changeCation = () => {
+    if (this.props.addStatus) {
+      return "Thêm Mới Nội Dung Note";
+    } else{
+      return "Sửa Nội Dung Note";
     }
-  }
+  };
+
+  submitForm = e => {
+    e.preventDefault();
+
+    this.props.changeEditStatus();
+  };
 
   render() {
     const data = this.props.data.editItem;
     return (
       <div className="col-4">
-        <h3>Sửa Nội Dung Note</h3>
-        <form >
+        <h3>{this.changeCation()}</h3>
+        <form onSubmit={e => this.submitForm(e)}>
           <div className="form-group">
             <label htmlFor="noteTittle">Tiêu Đề Note</label>
             <input
@@ -100,7 +112,8 @@ class NoteForm extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    data: state.dataNote
+    data: state.dataNote,
+    addStatus: state.dataNote.isAdd
   };
 };
 
@@ -122,7 +135,19 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch({
         type: "CHANGE_EDIT_STATUS"
       });
-    }
+    },
+    alertOn: () => {
+      dispatch({
+        type: "ALERT_ON"
+      });
+    },
+    alertOff: () => {
+      dispatch({
+        type: "ALERT_OFF"
+      });
+    },
+
+
   };
 };
 

@@ -1,8 +1,13 @@
 import React from 'react'
+import { connect } from "react-redux";
 
 class Nav extends React.Component {
   handleAdd = (e) => {
     e.preventDefault();
+
+    this.props.changeEditStatus();
+    this.props.changeAddStatus();
+
   }
 
   render () {
@@ -25,4 +30,29 @@ class Nav extends React.Component {
   }
 }
 
-export default Nav;
+const mapStateToProps = (state, ownProps) => {
+  return {
+    data: state.dataNote
+  };
+};
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    changeEditStatus: () => {
+      dispatch({
+        type: "CHANGE_EDIT_STATUS"
+      });
+    },
+    changeAddStatus: () => {
+      dispatch({
+        type: "CHANGE_ADD_STATUS"
+      });
+    }
+  };
+};
+
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Nav);
