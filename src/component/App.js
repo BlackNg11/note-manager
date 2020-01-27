@@ -1,14 +1,18 @@
 import React from 'react';
+import { connect } from 'react-redux';
+
 import Nav from './Nav';
 import NoteForm from './NoteForm';
 import NoteList from './NoteList';
 
-import {noteData} from '../firebase';
 
 
 class App extends React.Component {
-  state = {
 
+  showForm = () => {
+    if (this.props.statusEdit.isEdit) {
+      return   <NoteForm />
+    }
   }
 
   render () {
@@ -18,7 +22,9 @@ class App extends React.Component {
         <div className='container'>
           <div className='row'>
             <NoteList />
-            <NoteForm />
+            {
+              this.showForm()
+            }
           </div>
         </div>
       </div>
@@ -26,6 +32,11 @@ class App extends React.Component {
   }
 }
 
+const mapStateToProps = (state, ownProps) => {
+  return {
+    statusEdit: state.dataNote
+  }
+}
 
 
-export default App;
+export default connect(mapStateToProps)(App);
